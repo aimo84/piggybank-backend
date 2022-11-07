@@ -10,13 +10,29 @@ import java.util.List;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final CurrencyConverterService converterService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, CurrencyConverterService converterService) {
         this.transactionRepository = transactionRepository;
+        this.converterService = converterService;
     }
 
     public List<Transaction> getTransactions(final Integer limit) {
-        return transactionRepository.getTransactions(limit).stream().sorted((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime())).toList();
+        return transactionRepository.getTransactions(limit)
+                .stream()
+                .sorted(TransactionService::compareDateTime)
+                .toList();
+    }
+
+    public void createTransaction(final Transaction transaction) {
+        // Convert the currency to euro.
+        transaction.setAmount(converterService.toEuro(transaction.getCurrency(), transaction.getAmount()));
+
+        transactionRepository.save(transaction);
+    }
+
+    private static int compareDateTime(final Transaction t1, final Transaction t2) {
+        return t2.getDateTime().compareTo(t1.getDateTime());
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,8 +14,9 @@ import java.util.List;
  */
 @Service
 public class TransactionRepository {
-    public List<Transaction> getTransactions(final Integer limit) {
+    private final List<Transaction> transactions = new ArrayList<>();
 
+    public TransactionRepository() {
         // Lunch
         Transaction transaction = new Transaction();
         transaction.setId(1L);
@@ -54,9 +56,18 @@ public class TransactionRepository {
         transaction3.setFromAccountId(1L);
         transaction3.setToAccountId(2L);
         transaction3.setDateTime(Instant.parse("2022-10-08T13:30:00.00Z"));
-        if (limit != null) {
-            return List.of(transaction, transaction1, transaction2, transaction3).subList(0, limit);
-        }
-        return List.of(transaction, transaction1, transaction2, transaction3);
+
+        transactions.add(transaction);
+        transactions.add(transaction1);
+        transactions.add(transaction2);
+        transactions.add(transaction3);
+    }
+
+    public List<Transaction> getTransactions(final Integer limit) {
+        return transactions.subList(0, limit != null ? limit : transactions.size());
+    }
+
+    public void save(final Transaction transaction) {
+        transactions.add(transaction);
     }
 }

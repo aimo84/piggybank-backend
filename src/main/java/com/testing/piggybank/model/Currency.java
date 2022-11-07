@@ -2,6 +2,7 @@ package com.testing.piggybank.model;
 
 public enum Currency {
     EURO,
-    POUND,
-    DOLLAR;
+    GBP, // British Pound Sterling
+    USD, // United States Dollar
+    AUD // Australian Dollar
 }
