@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -64,10 +65,26 @@ public class TransactionRepository {
     }
 
     public List<Transaction> getTransactions(final Integer limit) {
-        return transactions.subList(0, limit != null ? limit : transactions.size());
+        if(limit != null) {
+            return transactions.subList(transactions.size() - limit, transactions.size());
+        }
+        return transactions;
+    }
+
+    public List<Transaction> getTransactions() {
+        return getTransactions(null);
     }
 
     public void save(final Transaction transaction) {
         transactions.add(transaction);
+    }
+
+    public long getNextId() {
+        long lastId = getTransactions()
+                .stream()
+                .max(Comparator.comparingLong(Transaction::getId))
+                .map(Transaction::getId)
+                .orElse(0L);
+        return lastId + 1L;
     }
 }

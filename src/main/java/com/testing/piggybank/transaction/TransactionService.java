@@ -4,6 +4,7 @@ import com.testing.piggybank.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -27,7 +28,12 @@ public class TransactionService {
 
     public void createTransaction(final Transaction transaction) {
         // Convert the currency to euro.
-        transaction.setAmount(converterService.toEuro(transaction.getCurrency(), transaction.getAmount()));
+        final BigDecimal amountInEuro = converterService.toEuro(transaction.getCurrency(), transaction.getAmount());
+        transaction.setAmount(amountInEuro);
+
+        // Determine latest id.
+        final long nextId = transactionRepository.getNextId();
+        transaction.setId(nextId);
 
         transactionRepository.save(transaction);
     }
