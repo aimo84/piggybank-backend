@@ -1,10 +1,11 @@
 package com.testing.piggybank.account;
 
 import com.testing.piggybank.model.Account;
+import com.testing.piggybank.model.Direction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,15 @@ public class AccountService {
 
     public List<Account> getAccounts(long userId) {
         return accountRepository.getUserAccounts(userId);
+    }
+
+    public void updateBalance(final long accountId, final BigDecimal amount, final Direction direction) {
+        final Account accountToUpdate = getAccount(accountId).orElseThrow(RuntimeException::new);
+        final BigDecimal amountToUpdate = direction.equals(Direction.CREDIT) ? amount.negate() : amount;
+
+        final BigDecimal currentBalance = accountToUpdate.getBalance();
+        final BigDecimal newBalance = currentBalance.add(amountToUpdate);
+
+        accountToUpdate.setBalance(newBalance);
     }
 }

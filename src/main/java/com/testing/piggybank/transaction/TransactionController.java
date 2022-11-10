@@ -17,10 +17,13 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping
-    public ResponseEntity<GetTransactionsResponse> getTransactions(@RequestParam(name = "limit", required = false) final Integer limit) {
+    @GetMapping(path = "{accountId}")
+    public ResponseEntity<GetTransactionsResponse> getTransactions(
+            @RequestParam(name = "limit", required = false) final Integer limit,
+            @PathVariable final long accountId) {
+
         final GetTransactionsResponse response = new GetTransactionsResponse();
-        response.setTransactions(transactionService.getTransactions(limit));
+        response.setTransactions(transactionService.getTransactions(limit, accountId));
         return ResponseEntity.ok(response);
     }
 

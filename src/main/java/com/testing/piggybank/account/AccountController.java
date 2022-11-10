@@ -4,17 +4,16 @@ import com.testing.piggybank.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1/accounts")
 public class AccountController {
+    private final static String HEADER_USER_ID = "X-User-Id";
     private final AccountService accountService;
 
     @Autowired
@@ -34,9 +33,7 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<GetAccountsResponse> getAccounts() {
-        final long userId = 1L; // TODO: Get userId from token or session.
-
+    public ResponseEntity<GetAccountsResponse> getAccounts(@RequestHeader(HEADER_USER_ID) final long userId) {
         final List<Account> accounts = accountService.getAccounts(userId);
 
         GetAccountsResponse accountsResponse = new GetAccountsResponse();
@@ -45,6 +42,12 @@ public class AccountController {
                 .collect(Collectors.toList())
         );
         return ResponseEntity.ok(accountsResponse);
+    }
+
+    @PutMapping
+    public ResponseEntity<HttpStatus> updateAccount(@RequestBody @Valid UpdateAccountRequest request) {
+        System.out.println("Update account name: " + request.getAccountName() + " for accountid: " + request.getAccountId());
+        return ResponseEntity.ok().build();
     }
 
     private AccountResponse mapAccountToAccountResponse(final Account account) {
