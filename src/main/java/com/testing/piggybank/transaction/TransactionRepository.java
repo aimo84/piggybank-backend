@@ -11,57 +11,61 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Repository filled with mock data.
+ * Transaction repo with stub data.
+ * <pre>
+ * | From account   | To account    | Amount  |
+ * |----------------|---------------| ------- |
+ * | 2              | 1             | 15.00   |
+ * | 2              | 1             | 31.35   |
+ * | 1              | 4             | 137.29  |
+ * | 1              | 2             | 15.00   |
+ * </pre>
  */
 @Service
 public class TransactionRepository {
     private final List<Transaction> transactions = new ArrayList<>();
 
     public TransactionRepository() {
-        // Lunch
-        final Transaction transaction = new Transaction();
-        transaction.setId(1L);
-        transaction.setAmount(new BigDecimal("15.00"));
-        transaction.setCurrency(Currency.EURO);
-        transaction.setDescription("Lunch voor je verjaardag");
-        transaction.setFromAccountId(2L);
-        transaction.setToAccountId(1L);
-        transaction.setDateTime(Instant.parse("2022-10-05T13:15:00.00Z"));
-
-        // Taxi
         final Transaction transaction1 = new Transaction();
-        transaction1.setId(2L);
-        transaction1.setAmount(new BigDecimal("31.35"));
+        transaction1.setId(1L);
+        transaction1.setAmount(new BigDecimal("15.00"));
         transaction1.setCurrency(Currency.EURO);
-        transaction1.setDescription("Taxi ritje Nijmegen voorschot");
+        transaction1.setDescription("Gefeliciteerd met je verjaardag!");
         transaction1.setFromAccountId(2L);
         transaction1.setToAccountId(1L);
-        transaction1.setDateTime(Instant.parse("2022-10-05T13:30:00.00Z"));
+        transaction1.setDateTime(Instant.parse("2022-10-05T13:15:00.00Z"));
 
-        // Hotel
         final Transaction transaction2 = new Transaction();
-        transaction2.setId(3L);
-        transaction2.setAmount(new BigDecimal("-137.29"));
+        transaction2.setId(2L);
+        transaction2.setAmount(new BigDecimal("31.35"));
         transaction2.setCurrency(Currency.EURO);
-        transaction2.setDescription("Hotel overnachting + ontbijt");
-        transaction2.setFromAccountId(1L);
-        transaction2.setToAccountId(4L);
-        transaction2.setDateTime(Instant.parse("2022-10-07T13:30:00.00Z"));
+        transaction2.setDescription("Bedankt Melvin voor je hulp");
+        transaction2.setFromAccountId(2L);
+        transaction2.setToAccountId(1L);
+        transaction2.setDateTime(Instant.parse("2022-10-05T13:30:00.00Z"));
 
-        // Lunch
         final Transaction transaction3 = new Transaction();
-        transaction3.setId(4L);
-        transaction3.setAmount(new BigDecimal("15.00"));
+        transaction3.setId(3L);
+        transaction3.setAmount(new BigDecimal("137.29"));
         transaction3.setCurrency(Currency.EURO);
-        transaction3.setDescription("Te weinig lunchgeld betaald");
+        transaction3.setDescription("Overname Playstation");
         transaction3.setFromAccountId(1L);
-        transaction3.setToAccountId(2L);
-        transaction3.setDateTime(Instant.parse("2022-10-08T13:30:00.00Z"));
+        transaction3.setToAccountId(4L);
+        transaction3.setDateTime(Instant.parse("2022-10-07T13:30:00.00Z"));
 
-        transactions.add(transaction);
+        final Transaction transaction4 = new Transaction();
+        transaction4.setId(4L);
+        transaction4.setAmount(new BigDecimal("15.00"));
+        transaction4.setCurrency(Currency.EURO);
+        transaction4.setDescription("Pizza eten");
+        transaction4.setFromAccountId(1L);
+        transaction4.setToAccountId(2L);
+        transaction4.setDateTime(Instant.parse("2022-10-08T13:30:00.00Z"));
+
         transactions.add(transaction1);
         transactions.add(transaction2);
         transactions.add(transaction3);
+        transactions.add(transaction4);
     }
 
     public List<Transaction> getTransactions(final Integer limit, final long accountId) {
@@ -69,6 +73,7 @@ public class TransactionRepository {
                 .stream()
                 .filter(transaction -> transaction.getToAccountId() == accountId || transaction.getFromAccountId() == accountId)
                 .toList();
+
         if (transactionsForAccount.size() == 0) {
             return transactionsForAccount;
         }

@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public class Account {
     private BigDecimal balance;
     private String name;
-    private long id;
-    private long userId;
+    private final long id;
+    private final long userId;
 
     public Account(BigDecimal balance, String name, long id, long userId) {
         this.balance = balance;

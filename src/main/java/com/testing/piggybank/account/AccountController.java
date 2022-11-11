@@ -22,7 +22,7 @@ public class AccountController {
     }
 
     @GetMapping(path = "{accountId}")
-    public ResponseEntity<AccountResponse> getAccount(@PathVariable long accountId) {
+    public ResponseEntity<AccountResponse> getAccount(@PathVariable final long accountId) {
         return accountService
                 .getAccount(accountId)
                 .map(account -> {
@@ -36,17 +36,20 @@ public class AccountController {
     public ResponseEntity<GetAccountsResponse> getAccounts(@RequestHeader(HEADER_USER_ID) final long userId) {
         final List<Account> accounts = accountService.getAccounts(userId);
 
-        GetAccountsResponse accountsResponse = new GetAccountsResponse();
+        final GetAccountsResponse accountsResponse = new GetAccountsResponse();
         accountsResponse.setAccounts(accounts.stream()
                 .map(this::mapAccountToAccountResponse)
                 .collect(Collectors.toList())
         );
+
         return ResponseEntity.ok(accountsResponse);
     }
 
     @PutMapping
     public ResponseEntity<HttpStatus> updateAccount(@RequestBody @Valid UpdateAccountRequest request) {
+        // TODO: Implement.
         System.out.println("Update account name: " + request.getAccountName() + " for accountid: " + request.getAccountId());
+
         return ResponseEntity.ok().build();
     }
 

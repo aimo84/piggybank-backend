@@ -15,9 +15,9 @@ public class AccountRepository {
 
     public AccountRepository() {
         var account1 = new Account(new BigDecimal("909.06"),"Rekening van Melvin", 1L, 1L);
-        var account2 = new Account(new BigDecimal("1061.35"),"Rekening van Sara", 2L, 2L);
+        var account2 = new Account(new BigDecimal("968.65"),"Rekening van Sara", 2L, 2L);
         var account3 = new Account(new BigDecimal("1000.00"),"Rekening van Cem", 3L, 3L);
-        var account4 = new Account(new BigDecimal("862.71"),"Rekening van Sophie", 4L, 4L);
+        var account4 = new Account(new BigDecimal("1137.29"),"Rekening van Sophie", 4L, 4L);
 
         this.accounts.add(account1);
         this.accounts.add(account2);
