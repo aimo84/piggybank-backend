@@ -38,8 +38,8 @@ public class TransactionController {
         transaction.setAmount(request.getAmount());
         transaction.setCurrency(request.getCurrency());
         transaction.setDescription(request.getDescription());
-        transaction.setFromAccountId(request.getFromAccountId());
-        transaction.setToAccountId(request.getToAccountId());
+//        transaction.setFromAccountId(request.getFromAccountId());
+//        transaction.setToAccountId(request.getToAccountId());
         transaction.setDateTime(Instant.now());
         return transaction;
     }

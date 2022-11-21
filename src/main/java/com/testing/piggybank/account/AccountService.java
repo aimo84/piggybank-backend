@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +20,13 @@ public class AccountService {
     }
 
     public Optional<Account> getAccount(final long accountId) {
-        return accountRepository.getAccount(accountId);
+        return accountRepository.findById(accountId);
     }
 
     public List<Account> getAccounts(long userId) {
-        return accountRepository.getUserAccounts(userId);
+
+        return Collections.emptyList();
+//        return accountRepository.getUserAccounts(userId);
     }
 
     public void updateBalance(final long accountId, final BigDecimal amount, final Direction direction) {

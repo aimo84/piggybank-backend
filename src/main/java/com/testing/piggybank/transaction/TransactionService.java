@@ -42,10 +42,10 @@ public class TransactionService {
         transaction.setId(nextId);
 
         // Update balances
-        long fromAccountId = transaction.getFromAccountId();
+        long fromAccountId = transaction.getSenderAccount().getId();
         accountService.updateBalance(fromAccountId, transaction.getAmount(), Direction.CREDIT);
 
-        long toAccountId = transaction.getToAccountId();
+        long toAccountId = transaction.getReceiverAccount().getId();
         accountService.updateBalance(toAccountId, transaction.getAmount(), Direction.DEBIT);
 
         // Save the transaction.

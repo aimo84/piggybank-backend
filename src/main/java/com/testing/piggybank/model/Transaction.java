@@ -1,16 +1,41 @@
 package com.testing.piggybank.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Entity
+@Table(
+        name = "account"
+)
 public class Transaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
-    private long fromAccountId;
-    private long toAccountId;
+
+    @ManyToOne
+    private Account receiverAccount;
+
+    @ManyToOne
+    private Account senderAccount;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "amount")
     private BigDecimal amount;
-    private Currency currency;
+
+    @Column(name = "dateTime")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Instant dateTime;
+
+    @Column(name = "currency")
+    private Currency currency;
+
+    @Column(name = "status")
     private Status status;
 
     public long getId() {
@@ -19,22 +44,6 @@ public class Transaction {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getFromAccountId() {
-        return fromAccountId;
-    }
-
-    public void setFromAccountId(long fromAccountId) {
-        this.fromAccountId = fromAccountId;
-    }
-
-    public long getToAccountId() {
-        return toAccountId;
-    }
-
-    public void setToAccountId(long toAccountId) {
-        this.toAccountId = toAccountId;
     }
 
     public String getDescription() {
@@ -53,14 +62,6 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
     public Instant getDateTime() {
         return dateTime;
     }
@@ -77,4 +78,27 @@ public class Transaction {
         this.status = status;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public Account getSenderAccount() {
+        return senderAccount;
+    }
+
+    public void setSenderAccount(Account senderAccount) {
+        this.senderAccount = senderAccount;
+    }
+
+    public Account getReceiverAccount() {
+        return receiverAccount;
+    }
+
+    public void setReceiverAccount(Account receiverAccount) {
+        this.receiverAccount = receiverAccount;
+    }
 }
