@@ -2,7 +2,6 @@ package com.testing.piggybank.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Table(
@@ -22,12 +21,6 @@ public class Account {
 
     @Column(name = "userid")
     private long userId;
-
-    @OneToMany(mappedBy = "receiverAccount")
-    private List<Transaction> transactionsAsReceiver;
-
-    @OneToMany(mappedBy = "senderAccount")
-    private List<Transaction> transactionsAsSender;
 
     public BigDecimal getBalance() {
         return balance;

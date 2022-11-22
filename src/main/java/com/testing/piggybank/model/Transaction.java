@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Entity
 @Table(
-        name = "account"
+        name = "transaction"
 )
 public class Transaction {
     @Id

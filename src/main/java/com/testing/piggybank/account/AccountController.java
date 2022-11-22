@@ -34,7 +34,7 @@ public class AccountController {
 
     @GetMapping
     public ResponseEntity<GetAccountsResponse> getAccounts(@RequestHeader(HEADER_USER_ID) final long userId) {
-        final List<Account> accounts = accountService.getAccounts(userId);
+        final List<Account> accounts = accountService.getAccountsByUserId(userId);
 
         GetAccountsResponse accountsResponse = new GetAccountsResponse();
         accountsResponse.setAccounts(accounts.stream()
@@ -46,7 +46,9 @@ public class AccountController {
 
     @PutMapping
     public ResponseEntity<HttpStatus> updateAccount(@RequestBody @Valid UpdateAccountRequest request) {
+        // TODO: Implement.
         System.out.println("Update account name: " + request.getAccountName() + " for accountid: " + request.getAccountId());
+
         return ResponseEntity.ok().build();
     }
 
