@@ -2,7 +2,7 @@
 Example Java application built with [Spring Boot](https://spring.io/projects/spring-boot).
 
 ## Run/debug
-Simply run the PiggBankApplication.java and it will start the application.
+Simply run the PiggyBankApplication.java, and it will start the application. Or run `mvn spring-boot:run`.
 
 ## Database
 ### Connect to in memory h2 database
@@ -13,7 +13,7 @@ If you start the application, it will also start an instance of the in memory h2
 - User Name: Sa
 - Password: password
 
-## Disclaimer
+## Disclaimer!
 This app should never be used in production. This app is intended as a test and it contains some bugs to be fixed. The software is used as part of a workshop. The security of the software is also not safe for production purposes.
 
 ## Guides
