@@ -1,19 +1,26 @@
 package com.testing.piggybank.model;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Entity
+@Table(
+        name = "account"
+)
 public class Account {
-    private BigDecimal balance;
-    private String name;
-    private final long id;
-    private final long userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private long id;
 
-    public Account(BigDecimal balance, String name, long id, long userId) {
-        this.balance = balance;
-        this.name = name;
-        this.id = id;
-        this.userId = userId;
-    }
+    @Column(name = "balance")
+    private BigDecimal balance;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "userid")
+    private long userId;
 
     public BigDecimal getBalance() {
         return balance;

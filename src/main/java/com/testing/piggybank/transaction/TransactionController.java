@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/v1/transactions")
@@ -14,43 +14,38 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @Autowired
-    public TransactionController(final TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
     @GetMapping(path = "{accountId}")
     public ResponseEntity<GetTransactionsResponse> getTransactions(
-            @PathVariable final long accountId,
-            @RequestParam(name = "limit", required = false) final Integer limit) {
-
-        final List<Transaction> transactions = transactionService.getTransactions(limit, accountId);
-        final List<TransactionResponse> transactionsResponse = transactions
+            @RequestParam(name = "limit", required = false) final Integer limit,
+            @PathVariable final long accountId) {
+        final GetTransactionsResponse response = new GetTransactionsResponse();
+        final List<TransactionResponse> transactionResponses = transactionService.getTransactions(limit, accountId)
                 .stream()
                 .map(transaction -> mapTransactionToTransactionResponse(transaction, accountId))
-                .toList();
-
-        final GetTransactionsResponse response = new GetTransactionsResponse();
-        response.setTransactions(transactionsResponse);
+                .collect(Collectors.toList());
+        response.setTransactions(transactionResponses);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
     public ResponseEntity<Object> createTransaction(@RequestBody final CreateTransactionRequest request) {
-        transactionService.createTransaction(mapRequestToTransaction(request));
+        transactionService.createTransaction(request);
         return ResponseEntity.ok().build();
     }
 
-    private TransactionResponse mapTransactionToTransactionResponse(final Transaction transaction, final long accountId) {
+    public TransactionResponse mapTransactionToTransactionResponse(final Transaction transaction, final long accountId) {
         final TransactionResponse transactionResponse = new TransactionResponse();
         transactionResponse.setId(transaction.getId());
 
         transactionResponse.setDescription(transaction.getDescription());
         transactionResponse.setDateTime(transaction.getDateTime());
-        transactionResponse.setToAccountId(transaction.getToAccountId());
-        transactionResponse.setFromAccountId(transaction.getFromAccountId());
 
         // When transaction is initiated from current account, the amount is credit.
-        if (accountId == transaction.getFromAccountId()) {
+        if (accountId == transaction.getSenderAccount().getId()) {
             transactionResponse.setAmount(transaction.getAmount().negate());
         } else {
             transactionResponse.setAmount(transaction.getAmount());
@@ -58,14 +53,4 @@ public class TransactionController {
         return transactionResponse;
     }
 
-    private Transaction mapRequestToTransaction(final CreateTransactionRequest request) {
-        final Transaction transaction = new Transaction();
-        transaction.setAmount(request.getAmount());
-        transaction.setCurrency(request.getCurrency());
-        transaction.setDescription(request.getDescription());
-        transaction.setFromAccountId(request.getFromAccountId());
-        transaction.setToAccountId(request.getToAccountId());
-        transaction.setDateTime(Instant.now());
-        return transaction;
-    }
 }

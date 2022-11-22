@@ -19,11 +19,11 @@ public class AccountService {
     }
 
     public Optional<Account> getAccount(final long accountId) {
-        return accountRepository.getAccount(accountId);
+        return accountRepository.findById(accountId);
     }
 
-    public List<Account> getAccounts(long userId) {
-        return accountRepository.getUserAccounts(userId);
+    public List<Account> getAccountsByUserId(long userId) {
+        return accountRepository.findAllByUserId(userId);
     }
 
     public void updateBalance(final long accountId, final BigDecimal amount, final Direction direction) {

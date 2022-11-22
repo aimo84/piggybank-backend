@@ -34,7 +34,7 @@ public class AccountController {
 
     @GetMapping
     public ResponseEntity<GetAccountsResponse> getAccounts(@RequestHeader(HEADER_USER_ID) final long userId) {
-        final List<Account> accounts = accountService.getAccounts(userId);
+        final List<Account> accounts = accountService.getAccountsByUserId(userId);
 
         final GetAccountsResponse accountsResponse = new GetAccountsResponse();
         accountsResponse.setAccounts(accounts.stream()
