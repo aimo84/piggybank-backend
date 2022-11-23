@@ -13,6 +13,13 @@ public class CurrencyConverterService {
     BigDecimal EUR = new BigDecimal("1.00");
     BigDecimal AUD = new BigDecimal("1.50");
 
+    /**
+     * Convert foreign currency to EURO.
+     *
+     * @param chosenCurrency chosen currency
+     * @param amount         The given amount
+     * @return {@link BigDecimal} the foreign currency converted to EURO.
+     */
     public BigDecimal toEuro(final Currency chosenCurrency, final BigDecimal amount) {
         return amount;
     }

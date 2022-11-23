@@ -12,6 +12,15 @@ import java.util.stream.Collectors;
 
 @Repository
 public interface AccountRepository extends CrudRepository<Account, Long> {
+    /**
+     * Get all accounts from database.
+     * @return List of {@link Account}
+     */
     List<Account> findAll();
-    List<Account> findAllByUserId(long accountId);
+
+    /**
+     * Get all accounts from database for specifiv userId;
+     * @return List of {@link Account}
+     */
+    List<Account> findAllByUserId(long userId);
 }

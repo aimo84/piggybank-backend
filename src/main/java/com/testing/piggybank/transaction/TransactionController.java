@@ -2,6 +2,7 @@ package com.testing.piggybank.transaction;
 
 import com.testing.piggybank.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,25 +15,42 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @Autowired
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(final TransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
+    /**
+     * Get transactions for given account ID.
+     *
+     * @param limit     Limit the list of transaction (max results).
+     * @param accountId The account ID of the requested transactions
+     * @return {@link GetTransactionsResponse}
+     */
     @GetMapping(path = "{accountId}")
     public ResponseEntity<GetTransactionsResponse> getTransactions(
             @RequestParam(name = "limit", required = false) final Integer limit,
             @PathVariable final long accountId) {
-        final GetTransactionsResponse response = new GetTransactionsResponse();
+
+        // Fetch transactions and map it.
         final List<TransactionResponse> transactionResponses = transactionService.getTransactions(limit, accountId)
                 .stream()
                 .map(transaction -> mapTransactionToTransactionResponse(transaction, accountId))
                 .collect(Collectors.toList());
+
+        // Create the response
+        final GetTransactionsResponse response = new GetTransactionsResponse();
         response.setTransactions(transactionResponses);
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Create a new transaction (transfer)
+     *
+     * @param request {@link CreateTransactionRequest} information to create the transactions
+     * @return {@link HttpStatus}
+     */
     @PostMapping
-    public ResponseEntity<Object> createTransaction(@RequestBody final CreateTransactionRequest request) {
+    public ResponseEntity<HttpStatus> createTransaction(@RequestBody final CreateTransactionRequest request) {
         transactionService.createTransaction(request);
         return ResponseEntity.ok().build();
     }
@@ -52,5 +70,4 @@ public class TransactionController {
         }
         return transactionResponse;
     }
-
 }

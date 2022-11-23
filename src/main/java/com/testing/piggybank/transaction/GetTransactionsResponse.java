@@ -3,7 +3,7 @@ package com.testing.piggybank.transaction;
 import java.util.List;
 
 public class GetTransactionsResponse {
-    List<TransactionResponse> transactions;
+    private List<TransactionResponse> transactions;
 
     public List<TransactionResponse> getTransactions() {
         return transactions;

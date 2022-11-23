@@ -12,6 +12,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This service is responsible for:
+ * <ul>
+ *     <li>Get transactions (transfers)</li>
+ *     <li>Create transaction (transfer from one account to another)</li>
+ * </ul>
+ */
 @Service
 public class TransactionService {
 
@@ -28,8 +35,15 @@ public class TransactionService {
         this.accountService = accountService;
     }
 
+    /**
+     * Get transactions for given account ID.
+     *
+     * @param limit     Limit the list of transaction (max results).
+     * @param accountId The ID of the accounts the transaction are requested for.
+     * @return List of {@link Transaction}
+     */
     public List<Transaction> getTransactions(final Integer limit, final long accountId) {
-        // Get all transactions (not efficient)
+        // Get all transactions from database.
         final List<Transaction> result = new ArrayList<>();
         transactionRepository.findAll().forEach(result::add);
 
@@ -39,14 +53,22 @@ public class TransactionService {
                 .toList();
     }
 
-    public List<Transaction> filterAndLimitTransactions(final List<Transaction> result, final long accountId, final Integer limit) {
+    /**
+     * Filters transactions that only belongs to given account ID and limits (max size) results.
+     *
+     * @param transactions The list of transactions that needs to be filtered
+     * @param accountId    account ID that
+     * @param limit        max results
+     * @return list of {@link Transaction}
+     */
+    public List<Transaction> filterAndLimitTransactions(final List<Transaction> transactions, final long accountId, final Integer limit) {
         // Get all transactions that belong to this accountId.
-        final List<Transaction> transactionsForAccount = result
+        final List<Transaction> transactionsForAccount = transactions
                 .stream()
                 .filter(transaction -> transaction.getReceiverAccount().getId() == accountId || transaction.getSenderAccount().getId() == accountId)
                 .toList();
 
-        // No transactions found for account.
+        // No transactions left for account.
         if (transactionsForAccount.size() == 0) {
             return transactionsForAccount;
         }
@@ -60,6 +82,11 @@ public class TransactionService {
         return transactionsForAccount;
     }
 
+    /**
+     * Create and saves the transaction.
+     *
+     * @param request {@link CreateTransactionRequest}
+     */
     public void createTransaction(final CreateTransactionRequest request) {
         final Transaction transaction = mapRequestToTransaction(request);
 
@@ -77,15 +104,15 @@ public class TransactionService {
         // Save the transaction.
         transactionRepository.save(transaction);
     }
-
+    
     public static int sortDescByDateTime(final Transaction t1, final Transaction t2) {
         return t2.getDateTime().compareTo(t1.getDateTime());
     }
 
     private Transaction mapRequestToTransaction(final CreateTransactionRequest request) {
         // Find the accounts that belong to given ID's
-        final Account senderAccount = accountService.getAccount(request.getFromAccountId()).orElseThrow(RuntimeException::new);
-        final Account receiverAccount = accountService.getAccount(request.getToAccountId()).orElseThrow(RuntimeException::new);
+        final Account senderAccount = accountService.getAccount(request.getSenderAccountId()).orElseThrow(RuntimeException::new);
+        final Account receiverAccount = accountService.getAccount(request.getReceiverAccountId()).orElseThrow(RuntimeException::new);
 
         // Map to transaction so it can be persisted
         final Transaction transaction = new Transaction();

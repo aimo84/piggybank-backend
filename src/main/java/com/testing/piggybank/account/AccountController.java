@@ -10,6 +10,12 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller responsible for:
+ * - Get account for specific account id.
+ * - Get all accounts for user id.
+ * - Update account information.
+ */
 @RestController
 @RequestMapping(path = "/api/v1/accounts")
 public class AccountController {
@@ -21,6 +27,12 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+    /**
+     * Get account information.
+     *
+     * @param accountId - ID of account that is requested
+     * @return {@link AccountResponse}
+     */
     @GetMapping(path = "{accountId}")
     public ResponseEntity<AccountResponse> getAccount(@PathVariable final long accountId) {
         return accountService
@@ -32,6 +44,12 @@ public class AccountController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    /**
+     * Get all accounts that belongs to given user ID.
+     *
+     * @param userId - User ID of "logged in" user.
+     * @return {@link GetAccountsResponse}
+     */
     @GetMapping
     public ResponseEntity<GetAccountsResponse> getAccounts(@RequestHeader(HEADER_USER_ID) final long userId) {
         final List<Account> accounts = accountService.getAccountsByUserId(userId);
@@ -45,8 +63,14 @@ public class AccountController {
         return ResponseEntity.ok(accountsResponse);
     }
 
+    /**
+     * Update account information.
+     *
+     * @param request {@link UpdateAccountRequest}
+     * @return http status
+     */
     @PutMapping
-    public ResponseEntity<HttpStatus> updateAccount(@RequestBody @Valid UpdateAccountRequest request) {
+    public ResponseEntity<HttpStatus> updateAccount(@RequestBody @Valid final UpdateAccountRequest request) {
         // TODO: Implement.
         System.out.println("Update account name: " + request.getAccountName() + " for accountid: " + request.getAccountId());
 

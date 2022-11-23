@@ -5,26 +5,26 @@ import com.testing.piggybank.model.Currency;
 import java.math.BigDecimal;
 
 public class CreateTransactionRequest {
-    private long fromAccountId;
-    private long toAccountId;
+    private long senderAccountId;
+    private long receiverAccountId;
     private String description;
     private BigDecimal amount;
     private Currency currency;
 
-    public long getFromAccountId() {
-        return fromAccountId;
+    public long getSenderAccountId() {
+        return senderAccountId;
     }
 
-    public void setFromAccountId(long fromAccountId) {
-        this.fromAccountId = fromAccountId;
+    public void setSenderAccountId(long senderAccountId) {
+        this.senderAccountId = senderAccountId;
     }
 
-    public long getToAccountId() {
-        return toAccountId;
+    public long getReceiverAccountId() {
+        return receiverAccountId;
     }
 
-    public void setToAccountId(long toAccountId) {
-        this.toAccountId = toAccountId;
+    public void setReceiverAccountId(long receiverAccountId) {
+        this.receiverAccountId = receiverAccountId;
     }
 
     public String getDescription() {
